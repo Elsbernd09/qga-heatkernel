@@ -72,6 +72,32 @@ cd qga-heatkernel
 python -m pip install -r requirements.txt
 ```
 
+## How to Run
+
+1. Install dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+2. Run the full demo:
+
+```bash
+python scripts/run_qga_demo.py
+```
+
+3. Run the tests:
+
+```bash
+pytest
+```
+
+4. Run the notebook-style research walkthrough:
+
+```bash
+python notebooks/qga_research_demo.py
+```
+
 ## Quick Start
 
 ```python

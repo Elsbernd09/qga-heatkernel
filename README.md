@@ -101,6 +101,142 @@ pytest
 python notebooks/qga_research_demo.py
 ```
 
+## Example Demo Output
+
+```text
+QGA Research Pipeline Demo
+This script is for demonstration only and does not provide investment advice.
+
+================================================================================
+DATA
+================================================================================
+Downloaded adjusted close prices for 12 assets from 2022-01-03 to 2023-12-29.
+               GLD     QQQ   NVDA    AMZN    TLT     JPM     SPY    XOM    META      GS    MSFT    AAPL
+Date                                                                                                   
+2023-12-22  190.27  402.76  48.74  153.42  88.88  158.58  459.78  93.79  350.31  360.72  367.44  191.43
+2023-12-26  191.72  405.22  49.19  153.41  89.14  159.51  461.72  94.01  351.74  361.63  367.52  190.89
+2023-12-27  192.59  406.05  49.33  153.34  90.72  160.47  462.56  93.56  354.72  364.35  366.94  190.99
+2023-12-28  191.47  405.85  49.43  153.38  90.06  161.32  462.73  92.21  355.20  366.18  368.13  191.41
+2023-12-29  191.17  404.09  49.43  151.94  89.24  161.13  461.39  92.02  350.88  365.57  368.87  190.38
+Computed log returns with 501 observations.
+
+================================================================================
+P-ADIC MARKET TREE
+================================================================================
+Path to root for AAPL: ['Global Market', 'Equities', 'Technology', 'AAPL']
+Sample ultrametric distances:
+       AAPL   MSFT    SPY
+AAPL  0.125  0.250  1.000
+MSFT  0.250  0.125  1.000
+SPY   1.000  1.000  0.125
+
+================================================================================
+HEAT KERNEL DIFFUSION
+================================================================================
+Built heat diffusion graph with 12 nodes and 43 edges.
+TLT     0.0071
+META    0.0043
+AMZN    0.0042
+MSFT    0.0042
+NVDA    0.0042
+
+================================================================================
+RICCI CURVATURE
+================================================================================
+Computed curvature for 12 assets.
+GLD    -0.9399
+QQQ    -0.5041
+SPY    -0.4454
+XOM    -0.2643
+AAPL   -0.1228
+Curvature collapse flags (most recent):
+GLD     0
+QQQ     0
+NVDA    0
+AMZN    0
+TLT     0
+JPM     0
+SPY     1
+XOM     0
+META    0
+GS      0
+MSFT    0
+AAPL    0
+
+================================================================================
+PERSISTENT HOMOLOGY
+================================================================================
+Persistent homology summary:
+  num_h0: 12
+  num_h1: 1
+  max_h1_persistence: 0.012859582901000977
+  avg_h1_persistence: 0.012859582901000977
+  total_persistence: 0.012859582901000977
+  topological_complexity_score: 0.014145541191101075
+Regime label: Low Complexity / Calm
+Rolling diagrams produced: 45
+
+================================================================================
+PATH-INTEGRAL SIMULATION
+================================================================================
+Path-integral summary for AAPL:
+  expected_terminal_price: 194.1715
+  expected_return: 0.0199
+  upside_probability: 0.5843
+  downside_probability: 0.4157
+  confidence_concentration: 0.1257
+  value_at_risk_5: -0.1011
+  value_at_risk_1: -0.1438
+  expected_shortfall_5: -0.1302
+  best_case_95: 0.1531
+  worst_case_5: -0.1011
+
+================================================================================
+GEOMETRIC SIGNAL TABLE
+================================================================================
+asset  final_score  signal  confidence
+ META    37.049935    Long    0.333333
+  JPM    35.924857    Long    1.000000
+   GS    31.046830    Long    1.000000
+ AMZN    24.532744 Neutral    0.333333
+  TLT    22.324798 Neutral    1.000000
+ NVDA    20.530896 Neutral    0.333333
+ MSFT    11.550541 Neutral    0.333333
+ AAPL     1.698287 Neutral    0.000000
+  XOM    -7.103529 Neutral    0.333333
+  SPY    -8.989326 Neutral    0.333333
+
+================================================================================
+BACKTEST RESULTS
+================================================================================
+Backtest equity curve summary:
+Date
+2023-12-22    1.1120
+2023-12-26    1.1167
+2023-12-27    1.1249
+2023-12-28    1.1292
+2023-12-29    1.1236
+Backtest metrics:
+  total_return: 0.1236
+  annualized_return: 0.0604
+  annualized_volatility: 0.2851
+  sharpe_ratio: 0.3481
+  max_drawdown: -0.4215
+
+Demo complete. This example is for research demonstration only.
+```
+
+### What this output shows
+
+- **DATA**: confirms price download and returns preparation for the selected tickers.
+- **P-ADIC MARKET TREE**: shows how an asset is placed in the hierarchical market tree and provides sample ultrametric distances.
+- **HEAT KERNEL DIFFUSION**: reports the constructed diffusion graph and a top-of-list heat stress ranking.
+- **RICCI CURVATURE**: summarizes node curvature values and flags recent curvature collapse events.
+- **PERSISTENT HOMOLOGY**: summarizes topology-derived regime features and assigns a sample regime label.
+- **PATH-INTEGRAL SIMULATION**: reports path simulation statistics for the selected asset, including expected terminal price and risk metrics.
+- **GEOMETRIC SIGNAL TABLE**: shows the combined research signal outputs with score, signal type, and confidence.
+- **BACKTEST RESULTS**: shows a final equity curve summary and key backtest performance metrics.
+
 ## Quick Start
 
 ```python

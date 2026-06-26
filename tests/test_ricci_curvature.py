@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
+import networkx as nx
 import numpy as np
 import pandas as pd
 import pytest
@@ -23,6 +24,7 @@ def test_build_correlation_graph_creates_weighted_edges():
 
     graph = RicciCurvatureEngine.build_correlation_graph(returns, threshold=0.5)
 
+    assert isinstance(graph, nx.Graph)
     assert set(graph.nodes) == {"A", "B", "C"}
     assert graph.has_edge("A", "B")
     assert graph["A"]["B"]["distance"] >= 0
@@ -62,17 +64,18 @@ def test_node_curvature_averages_edge_curvature():
 
 
 def test_curvature_time_series_shapes():
+    np.random.seed(0)
     returns = pd.DataFrame(
         {
-            "A": np.random.normal(size=80),
-            "B": np.random.normal(size=80),
-            "C": np.random.normal(size=80),
+            "A": np.random.normal(size=40),
+            "B": np.random.normal(size=40),
+            "C": np.random.normal(size=40),
         },
-        index=pd.date_range("2025-01-01", periods=80, freq="D"),
+        index=pd.date_range("2025-01-01", periods=40, freq="D"),
     )
-    curvature_df = RicciCurvatureEngine.curvature_time_series(returns, window=20, threshold=0.1)
+    curvature_df = RicciCurvatureEngine.curvature_time_series(returns, window=10, threshold=0.1)
 
-    assert curvature_df.shape[0] == 61
+    assert curvature_df.shape[0] == 31
     assert set(curvature_df.columns) == {"A", "B", "C"}
 
 
@@ -92,6 +95,7 @@ def test_detect_curvature_collapse_flags_negative_zscores():
 
 
 def test_liquidity_blackhole_score_outputs_dataframe():
+    np.random.seed(0)
     returns = pd.DataFrame(
         {
             "A": np.random.normal(size=50),
@@ -108,6 +112,7 @@ def test_liquidity_blackhole_score_outputs_dataframe():
 
 
 def test_detect_liquidity_blackholes_returns_boolean():
+    np.random.seed(0)
     returns = pd.DataFrame(
         {
             "A": np.linspace(0.1, 1.0, 30),

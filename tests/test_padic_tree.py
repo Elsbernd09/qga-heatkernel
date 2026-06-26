@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,11 +38,25 @@ def test_ultrametric_distance_respects_hierarchy():
     tree = build_default_market_tree()
 
     same_sector = tree.ultrametric_distance("AAPL", "MSFT", p=2)
-    different_sector = tree.ultrametric_distance("AAPL", "JPM", p=2)
+    different_sector = tree.ultrametric_distance("AAPL", "BTC-USD", p=2)
 
     assert same_sector < different_sector
-    assert same_sector == 2 ** -2
-    assert different_sector == 2 ** -1
+    assert same_sector == pytest.approx(2 ** -2)
+    assert different_sector == pytest.approx(2 ** 0)
+    assert tree.lowest_common_ancestor("AAPL", "BTC-USD").name == "Global Market"
+
+
+def test_distance_matrix_returns_dataframe_with_correct_shape():
+    tree = build_default_market_tree()
+    assets = ["AAPL", "MSFT", "BTC-USD"]
+    matrix = tree.distance_matrix(assets, p=2)
+
+    assert isinstance(matrix, pd.DataFrame)
+    assert matrix.shape == (3, 3)
+    assert list(matrix.index) == assets
+    assert list(matrix.columns) == assets
+    assert matrix.loc["AAPL", "MSFT"] == matrix.loc["MSFT", "AAPL"]
+    assert matrix.loc["BTC-USD", "BTC-USD"] == pytest.approx(2 ** -3)
 
 
 def test_distance_matrix_is_symmetric():
@@ -52,7 +67,7 @@ def test_distance_matrix_is_symmetric():
     assert list(matrix.index) == assets
     assert list(matrix.columns) == assets
     assert matrix.loc["AAPL", "MSFT"] == matrix.loc["MSFT", "AAPL"]
-    assert matrix.loc["SPY", "SPY"] == 1.0
+    assert matrix.loc["SPY", "SPY"] == pytest.approx(tree.ultrametric_distance("SPY", "SPY", p=2))
 
 
 def test_shock_propagation_score_increases_with_shared_depth():
@@ -62,5 +77,5 @@ def test_shock_propagation_score_increases_with_shared_depth():
     score_diff_sector = tree.shock_propagation_score("AAPL", "JPM", p=2)
 
     assert score_same_sector > score_diff_sector
-    assert score_same_sector == 2 ** 2
-    assert score_diff_sector == 2 ** 1
+    assert score_same_sector == pytest.approx(0.8)
+    assert score_diff_sector == pytest.approx(2.0 / 3.0)

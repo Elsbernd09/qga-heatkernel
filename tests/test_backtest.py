@@ -66,10 +66,20 @@ def test_run_backtest_returns_equity_curve_and_weights():
 
     result = engine.run_backtest(prices, signals, long_top_n=1, long_short=False, rebalance_frequency="D")
 
-    assert "equity_curve" in result
-    assert "weights" in result
+    assert set(result.keys()) == {"equity_curve", "daily_returns", "weights", "turnover", "trades"}
     assert result["weights"].shape[0] == len(dates)
     assert result["equity_curve"].iloc[0] == pytest.approx(1.0)
+
+
+def test_calculate_drawdown_returns_series():
+    engine = BacktestEngine()
+    equity_curve = pd.Series([1.0, 1.2, 1.1, 1.3], index=pd.date_range("2024-01-01", periods=4, freq="D"))
+    drawdown = engine.calculate_drawdown(equity_curve)
+
+    assert isinstance(drawdown, pd.Series)
+    assert drawdown.shape == equity_curve.shape
+    assert drawdown.iloc[0] == pytest.approx(0.0)
+    assert drawdown.iloc[2] < 0.0
 
 
 def test_equal_weight_and_spy_benchmarks():

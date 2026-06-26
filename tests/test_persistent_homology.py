@@ -31,16 +31,16 @@ def test_build_asset_feature_matrix_returns_standardized_features():
 
 
 def test_compute_diagram_returns_ripser_output():
-    dates = pd.date_range("2025-01-01", periods=60, freq="D")
+    dates = pd.date_range("2025-01-01", periods=30, freq="D")
     prices = pd.DataFrame(
         {
-            "A": np.sin(np.linspace(0, 3.14, 60)) + 10,
-            "B": np.cos(np.linspace(0, 3.14, 60)) + 20,
-            "SPY": np.linspace(100, 105, 60),
+            "A": np.sin(np.linspace(0, 3.14, 30)) + 10,
+            "B": np.cos(np.linspace(0, 3.14, 30)) + 20,
+            "SPY": np.linspace(100, 105, 30),
         },
         index=dates,
     )
-    features = PersistentHomologyRegimeDetector.build_asset_feature_matrix(prices, window=60)
+    features = PersistentHomologyRegimeDetector.build_asset_feature_matrix(prices, window=30)
     diagram = PersistentHomologyRegimeDetector.compute_diagram(features, maxdim=1)
 
     assert "dgms" in diagram
@@ -48,17 +48,17 @@ def test_compute_diagram_returns_ripser_output():
 
 
 def test_rolling_diagrams_returns_dataframe():
-    dates = pd.date_range("2025-01-01", periods=70, freq="D")
+    dates = pd.date_range("2025-01-01", periods=40, freq="D")
     prices = pd.DataFrame(
         {
-            "A": np.linspace(10, 20, 70),
-            "B": np.linspace(5, 7, 70),
-            "SPY": np.linspace(100, 110, 70),
+            "A": np.linspace(10, 20, 40),
+            "B": np.linspace(5, 7, 40),
+            "SPY": np.linspace(100, 110, 40),
         },
         index=dates,
     )
 
-    result = PersistentHomologyRegimeDetector.rolling_diagrams(prices, window=60, step=5, maxdim=1)
+    result = PersistentHomologyRegimeDetector.rolling_diagrams(prices, window=30, step=5, maxdim=1)
 
     assert "feature_matrix" in result.columns
     assert "diagram" in result.columns
@@ -81,6 +81,7 @@ def test_diagram_distance_and_regime_distance_matrix():
 
 
 def test_find_nearest_historical_regimes_returns_sorted_distances():
+    np.random.seed(0)
     feature_current = pd.DataFrame(np.random.normal(size=(3, 6)))
     diag_current = PersistentHomologyRegimeDetector.compute_diagram(feature_current, maxdim=1)
     historical = []

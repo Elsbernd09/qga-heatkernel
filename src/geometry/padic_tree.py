@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Iterable, List, Optional
+from typing import Dict, List, Optional
 
 import pandas as pd
 
@@ -35,10 +35,16 @@ class TreeNode:
 class PAdicMarketTree:
     """A hierarchical market tree using ultrametric distances.
 
-    This structure is p-adic-inspired because it models market similarity by the depth
-    of a shared hierarchy rather than performing literal p-adic arithmetic.
-    Assets that share a deeper common ancestor are considered closer in the
-    ultrametric space.
+    This structure is p-adic-inspired because it assigns market similarity based
+    on the depth of a shared hierarchy, not because it performs literal p-adic
+    arithmetic. In ultrametric spaces, the distance between two leaves is governed
+    by the level of their lowest common ancestor.
+
+    In a financial hierarchy, assets in the same sector or sub-industry share a
+    deeper common ancestor and therefore have a smaller ultrametric distance.
+    This can model market shock transmission: a shock at one asset is more likely
+    to affect a nearby asset in the same branch than a distant asset in another
+    asset class.
     """
 
     def __init__(self, root_name: str = "Global Market") -> None:
@@ -114,14 +120,14 @@ class PAdicMarketTree:
     def shock_propagation_score(self, source_asset: str, target_asset: str, p: int = 2) -> float:
         """Score how strongly a shock at source_asset propagates to target_asset.
 
-        The propagation score increases with shared hierarchical depth.
-        It is the inverse of ultrametric distance in the p-adic-inspired model.
+        In this p-adic-inspired hierarchy, closer assets share a deeper common ancestor.
+        The shock propagation score is higher when the ultrametric distance is smaller.
         """
         if p <= 1:
             raise ValueError("Parameter p must be greater than 1 for shock propagation score.")
 
-        lca = self.lowest_common_ancestor(source_asset, target_asset)
-        return float(p) ** lca.depth
+        distance = self.ultrametric_distance(source_asset, target_asset, p=p)
+        return 1.0 / (1.0 + distance)
 
 
 def build_default_market_tree() -> PAdicMarketTree:

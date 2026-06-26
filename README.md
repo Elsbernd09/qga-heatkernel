@@ -1,8 +1,11 @@
 # QGA: Quantum Geometric Alpha
 
-## Heat Kernel Signatures, p-adic Market Trees, Ricci Liquidity Curvature, Persistent Homology, and Path-Integral-Inspired Market Simulation
+## Executive Summary
 
-QGA is a quantitative research platform that represents financial markets as evolving geometric and topological structures. The project explores whether market stress, regime transitions, and asset dislocations can be captured by combining graph diffusion, hierarchical ultrametric structure, discrete curvature, persistent topology, and Monte Carlo path ensembles.
+QGA is a quantitative research platform that models financial markets as evolving geometric and topological systems.
+It combines a p-adic-inspired market hierarchy, heat kernel stress diffusion, Ricci curvature liquidity fragility, persistent homology regime detection, path-integral-inspired return simulation, and research-grade signal generation with backtesting.
+
+QGA is built for research and exploratory analysis, not guaranteed investment performance or financial advice.
 
 ## Project Overview
 

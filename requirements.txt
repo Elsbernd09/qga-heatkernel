@@ -8,3 +8,4 @@ ripser
 persim
 matplotlib
 scikit-learn
+streamlit
